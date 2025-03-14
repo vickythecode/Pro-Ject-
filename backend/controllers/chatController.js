@@ -1,0 +1,91 @@
+import Chat from "../models/Chat.js";
+import Notification from "../models/Notification.js";
+import Project from "../models/Project.js";
+
+// Get or create a chat for the project
+export const getOrCreateChat = async (req, res) => {
+  const { projectId } = req.body;
+
+  try {
+    let chat = await Chat.findOne({ projectId });
+
+    if (!chat) {
+      chat = await Chat.create({ projectId, messages: [] });
+    }
+
+    res.json(chat);
+  } catch (error) {
+    console.error("Error in getOrCreateChat:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+// Send a message (Ensure chat exists) with notification
+export const sendMessage = async (req, res) => {
+  const { projectId, text, sender } = req.body;
+
+  try {
+    let chat = await Chat.findOne({ projectId });
+
+    // Create chat if it does not exist
+    if (!chat) {
+      chat = await Chat.create({ projectId, messages: [] });
+    }
+
+    // Add new message
+    const newMessage = { sender, text, timestamp: new Date() };
+    chat.messages.push(newMessage);
+    await chat.save();
+
+    // Fetch the project to get team members and the owner
+    const project = await Project.findById(projectId).populate("team owner");
+    if (!project) {
+      return res.status(404).json({ message: "Project not found" });
+    }
+
+    // Collect all recipients (team + owner) except the sender
+    const recipients = [
+      project.owner,
+      ...project.team.filter((member) => member._id.toString() !== sender),
+    ];
+
+    // Send notifications to all recipients
+    const notifications = recipients.map(async (user) => {
+      const notification = await Notification.create({
+        user: user._id,
+        message: `New message in project "${project.name}" by ${req.user.name}: "${text}"`,
+      });
+
+      // Emit real-time notification using WebSocket
+      if (req.io) {
+        req.io.to(user._id.toString()).emit("newNotification", notification);
+      }
+    });
+
+    // Wait for all notifications to be created
+    await Promise.all(notifications);
+
+    res.json(newMessage);
+  } catch (error) {
+    console.error("Error in sendMessage:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+// Get messages for a project
+export const getMessages = async (req, res) => {
+  const { projectId } = req.params;
+
+  try {
+    const chat = await Chat.findOne({ projectId });
+
+    if (!chat) {
+      return res.json({ messages: [] });
+    }
+
+    res.json(chat.messages);
+  } catch (error) {
+    console.error("Error in getMessages:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
