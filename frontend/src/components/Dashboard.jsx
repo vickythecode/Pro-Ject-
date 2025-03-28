@@ -82,7 +82,7 @@ const Dashboard = () => {
           track progress, and achieve more with our AI-powered solution.
         </p>
         <Link
-          to="/login"
+          to="/projects"
           className={`px-8 py-3 rounded-lg text-lg transition ${darkMode ? "bg-green-500 hover:bg-green-400 text-white" : "bg-green-600 hover:bg-green-500 text-white"}`}
         >
           Get Started for Free

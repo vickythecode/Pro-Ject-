@@ -20,7 +20,6 @@ export const getOrCreateChat = async (req, res) => {
   }
 };
 
-// Send a message (Ensure chat exists) with notification
 export const sendMessage = async (req, res) => {
   const { projectId, text, sender } = req.body;
 
@@ -43,27 +42,34 @@ export const sendMessage = async (req, res) => {
       return res.status(404).json({ message: "Project not found" });
     }
 
-    // Collect all recipients (team + owner) except the sender
-    const recipients = [
-      project.owner,
-      ...project.team.filter((member) => member._id.toString() !== sender),
-    ];
+    // ✅ Collect all recipients (team + owner), excluding the sender
+    const recipients = [project.owner, ...project.team].filter(
+      (member) => member._id.toString() !== sender.toString()
+    );
 
-    // Send notifications to all recipients
-    const notifications = recipients.map(async (user) => {
-      const notification = await Notification.create({
-        user: user._id,
-        message: `New message in project "${project.name}" by ${req.user.name}: "${text}"`,
-      });
+    // ✅ Send notifications to all recipients except the sender
+    await Promise.all(
+      recipients.map(async (user) => {
+        // Check if the same notification already exists to prevent duplicates
+        const existingNotification = await Notification.findOne({
+          user: user._id,
+          message: `New message in project "${project.name}" by ${req.user.name}: "${text}"`,
+          read: false,
+        });
 
-      // Emit real-time notification using WebSocket
-      if (req.io) {
-        req.io.to(user._id.toString()).emit("newNotification", notification);
-      }
-    });
+        if (!existingNotification) {
+          const notification = await Notification.create({
+            user: user._id,
+            message: `New message in project "${project.name}" by ${req.user.name}: "${text}"`,
+          });
 
-    // Wait for all notifications to be created
-    await Promise.all(notifications);
+          // ✅ Emit real-time notification using WebSocket
+          if (req.io) {
+            req.io.to(user._id.toString()).emit("newNotification", notification);
+          }
+        }
+      })
+    );
 
     res.json(newMessage);
   } catch (error) {

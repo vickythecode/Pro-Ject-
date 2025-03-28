@@ -17,12 +17,16 @@ export const createNotification = async (req, res) => {
 
 export const getNotifications = async (req, res) => {
   try {
-    const notifications = await Notification.find({ user: req.user._id }).sort({ createdAt: -1 });
+    const notifications = await Notification.find({ user: req.user._id })
+      .sort({ createdAt: -1 })
+      .limit(50); // ✅ Limit results to prevent overload
+
     res.json(notifications);
   } catch (error) {
     res.status(500).json({ message: "Error fetching notifications", error });
   }
 };
+
 
 export const markAsRead = async (req, res) => {
   try {
@@ -34,9 +38,12 @@ export const markAsRead = async (req, res) => {
 
     if (!notification) return res.status(404).json({ message: "Notification not found" });
 
-    
+    // ✅ Avoid double deletion by checking if notification still exists
     setTimeout(async () => {
-      await Notification.findByIdAndDelete(req.params.id);
+      const existingNotification = await Notification.findById(req.params.id);
+      if (existingNotification) {
+        await Notification.findByIdAndDelete(req.params.id);
+      }
     }, 30000);
 
     res.json({ message: "Notification marked as read and will be deleted soon" });

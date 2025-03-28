@@ -13,6 +13,7 @@ import UserDashboard from "./pages/UserDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import TodoList from "./components/TodoList";
 import ContactForm from "./components/ContactForm";
+import ProjectFiles from "./components/ProjectFiles";
 
 const App = () => {
   const { user } = useContext(AuthContext);
@@ -38,6 +39,7 @@ const App = () => {
             <Route path="/profile" element={<UserDashboard />} />
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/contact" element={<ContactForm/>}/>
+            <Route path="/files/:projectId" element={<ProjectFiles/>}/>
           </>
         )}
 

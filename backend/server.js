@@ -15,6 +15,8 @@
   import searchRoutes from "./routes/searchRoutes.js"
   import messageRoutes from "./routes/messageRoutes.js"
   import scheduleDeadlineReminders from "./utils/deadlineReminder.js";
+  import fileRoutes from "./routes/fileRoutes.js";
+  import path from "path";
 
   dotenv.config();
 
@@ -26,6 +28,7 @@
   
   app.use(cookieParser())
   app.use(express.json());
+  app.use("/uploads", express.static(path.join("uploads")));
   app.use(
     cors({
       origin: "http://localhost:5173", // Allow only your frontend
@@ -42,6 +45,7 @@
   app.use("/api/admin",adminRoutes)
   app.use("/api/search",searchRoutes)
   app.use("/api/contact", messageRoutes);
+  app.use("/api/files", fileRoutes);
 
   // Socket.io Setup
 
