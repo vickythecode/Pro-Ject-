@@ -1,6 +1,7 @@
 import { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext"; // Importing theme context
+const backendUrl = import.meta.env.VITE_backendUrl
 
 const Notifications = () => {
   const { user } = useContext(AuthContext);
@@ -11,7 +12,7 @@ const Notifications = () => {
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        const response = await fetch("http://localhost:4000/api/notifications", {
+        const response = await fetch(`${backendUrl}/api/notifications`, {
           method: "GET",
           credentials: "include",
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -31,7 +32,7 @@ const Notifications = () => {
 
   const markAsRead = async (id) => {
     try {
-      await fetch(`http://localhost:4000/api/notifications/${id}/read`, {
+      await fetch(`${backendUrl}/api/notifications/${id}/read`, {
         method: "PATCH",
         credentials: "include",
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },

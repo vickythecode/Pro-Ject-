@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNotification } from "../context/NotificationContext";
+const backendUrl = import.meta.env.VITE_backendUrl
 
 const ProjectsList = () => {
   const [projects, setProjects] = useState([]);
@@ -8,7 +9,7 @@ const ProjectsList = () => {
 
   const fetchProjects = async () => {
     try {
-      const response = await fetch("http://localhost:4000/api/admin/projects", {
+      const response = await fetch(`${backendUrl}/api/admin/projects`, {
         credentials: "include",
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
@@ -27,7 +28,7 @@ const ProjectsList = () => {
     if (!confirm("Are you sure you want to delete this project?")) return;
 
     try {
-      await fetch(`http://localhost:4000/api/admin/projects/${projectId}`, {
+      await fetch(`${backendUrl}/api/admin/projects/${projectId}`, {
         method: "DELETE",
         credentials: "include",
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },

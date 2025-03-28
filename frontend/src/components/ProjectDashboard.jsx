@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Bar, Pie, Line } from "react-chartjs-2";
 import Chart from "chart.js/auto";
 import { useTheme } from "../context/ThemeContext";
+const backendUrl = import.meta.env.VITE_backendUrl
 
 
 const ProjectDashboard = ({ projectId }) => {
@@ -14,7 +15,7 @@ const ProjectDashboard = ({ projectId }) => {
 
   const fetchTasks = async () => {
     try {
-      const response = await fetch(`http://localhost:4000/api/tasks/${projectId}`, {
+      const response = await fetch(`${backendUrl}/api/tasks/${projectId}`, {
         credentials: "include",
       });
       const data = await response.json();

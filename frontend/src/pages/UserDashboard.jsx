@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
 import { useNavigate } from "react-router-dom";
+const backendUrl = import.meta.env.VITE_backendUrl
 
 const UserDashboard = () => {
   const { user, loading, handleLogout } = useContext(AuthContext);
@@ -29,7 +30,7 @@ const UserDashboard = () => {
 
   const fetchUserData = async () => {
     try {
-      const response = await fetch("http://localhost:4000/api/auth/me", {
+      const response = await fetch(`${backendUrl}/api/auth/me`, {
         method: "GET",
         credentials: "include",
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -57,7 +58,7 @@ const UserDashboard = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:4000/api/auth/profile", {
+      const response = await fetch(`${backendUrl}/api/auth/profile`, {
         method: "PUT",
         credentials: "include",
         headers: {

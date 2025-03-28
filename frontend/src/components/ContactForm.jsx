@@ -1,4 +1,5 @@
 import { useState } from "react";
+const backendUrl = import.meta.env.VITE_backendUrl
 
 const ContactForm = () => {
   const [formData, setFormData] = useState({ subject: "", message: "" });
@@ -15,7 +16,7 @@ const ContactForm = () => {
     setSuccess("");
 
     try {
-      const response = await fetch("http://localhost:4000/api/contact", {
+      const response = await fetch(`${backendUrl}/api/contact`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

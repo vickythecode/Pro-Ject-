@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
 import { useNotification } from "../context/NotificationContext";
+const backendUrl = import.meta.env.VITE_backendUrl
 
 const TaskManager = ({ projectId, team, projectOwnerId, project }) => {
   const { showNotification } = useNotification();
@@ -25,7 +26,7 @@ const TaskManager = ({ projectId, team, projectOwnerId, project }) => {
   const fetchTasks = async () => {
     try {
       const response = await fetch(
-        `http://localhost:4000/api/tasks/${projectId}`,
+        `${backendUrl}/api/tasks/${projectId}`,
         {
           credentials: "include",
         }
@@ -44,7 +45,7 @@ const TaskManager = ({ projectId, team, projectOwnerId, project }) => {
       return alert("Title and Description are required!");
     try {
       setLoading(true);
-      const response = await fetch("http://localhost:4000/api/tasks/create", {
+      const response = await fetch(`${backendUrl}/api/tasks/create`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -70,7 +71,7 @@ const TaskManager = ({ projectId, team, projectOwnerId, project }) => {
   const updateTaskStatus = async (taskId, status) => {
     try {
       const response = await fetch(
-        "http://localhost:4000/api/tasks/update-status",
+        `${backendUrl}/api/tasks/update-status`,
         {
           method: "PATCH",
           headers: {
@@ -100,7 +101,7 @@ const TaskManager = ({ projectId, team, projectOwnerId, project }) => {
   const deleteTask = async (taskId) => {
     try {
       const response = await fetch(
-        `http://localhost:4000/api/tasks/${taskId}`,
+        `${backendUrl}/api/tasks/${taskId}`,
         {
           method: "DELETE",
           headers: {
@@ -127,7 +128,7 @@ const TaskManager = ({ projectId, team, projectOwnerId, project }) => {
     setLoading(true);
     try {
       const response = await fetch(
-        "http://localhost:4000/api/tasks/suggest-tasks",
+        `${backendUrl}/api/tasks/suggest-tasks`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

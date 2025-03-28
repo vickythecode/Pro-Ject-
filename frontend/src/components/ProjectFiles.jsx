@@ -2,6 +2,7 @@
 import { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
+const backendUrl = import.meta.env.VITE_backendUrl
 
 const ProjectFiles = () => {
   const { projectId } = useParams();
@@ -21,7 +22,7 @@ const ProjectFiles = () => {
     setLoading(true);
     try {
       const response = await fetch(
-        `http://localhost:4000/api/files/${projectId}/files`,
+        `${backendUrl}/api/files/${projectId}/files`,
         {
           method: "GET",
           credentials: "include",
@@ -55,7 +56,7 @@ const ProjectFiles = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:4000/api/files/${projectId}/upload`,
+        `${backendUrl}/api/files/${projectId}/upload`,
         {
           method: "POST",
           credentials: "include",
@@ -76,7 +77,7 @@ const ProjectFiles = () => {
   // Delete file
   const deleteFile = async (fileId) => {
     try {
-      const response = await fetch(`http://localhost:4000/api/files/${fileId}`, {
+      const response = await fetch(`${backendUrl}/api/files/${fileId}`, {
         method: "DELETE",
         credentials: "include",
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },

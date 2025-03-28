@@ -1,8 +1,9 @@
 import { useEffect, useState, useRef } from "react";
 import io from "socket.io-client";
 import { useTheme } from "../context/ThemeContext";
+const backendUrl = import.meta.env.VITE_backendUrl
 
-const socket = io("http://localhost:4000");
+const socket = io(backendUrl);
 
 const Chat = ({ projectId, user }) => {
   const [messages, setMessages] = useState([]);
@@ -16,14 +17,14 @@ const Chat = ({ projectId, user }) => {
       return;
     }
 
-    fetch("http://localhost:4000/api/chats/create", {
+    fetch(`${backendUrl}/api/chats/create`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
       body: JSON.stringify({ projectId }),
     })
       .then(() =>
-        fetch(`http://localhost:4000/api/chats/${projectId}`, { credentials: "include" })
+        fetch(`${backendUrl}/api/chats/${projectId}`, { credentials: "include" })
       )
       .then((res) => res.json())
       .then((data) => {
@@ -52,7 +53,7 @@ const Chat = ({ projectId, user }) => {
     }
 
     try {
-      const res = await fetch("http://localhost:4000/api/chats/send", {
+      const res = await fetch(`${backendUrl}/api/chats/send`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

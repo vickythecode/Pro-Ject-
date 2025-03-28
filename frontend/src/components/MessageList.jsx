@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+const backendUrl = import.meta.env.VITE_backendUrl
 
 const MessagesList = () => {
   const [messages, setMessages] = useState([]);
@@ -6,7 +7,7 @@ const MessagesList = () => {
 
   const fetchMessages = async () => {
     try {
-      const response = await fetch("http://localhost:4000/api/contact", {
+      const response = await fetch(`${backendUrl}/api/contact`, {
         credentials: "include",
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
@@ -25,7 +26,7 @@ const MessagesList = () => {
     if (!window.confirm("Are you sure you want to delete this message?")) return;
 
     try {
-      const response = await fetch(`http://localhost:4000/api/contact/${id}`, {
+      const response = await fetch(`${backendUrl}/api/contact/${id}`, {
         method: "DELETE",
         credentials: "include",
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },

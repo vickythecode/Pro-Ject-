@@ -1,6 +1,8 @@
 import { createContext, useState, useEffect } from "react";
 import { useNotification } from "./NotificationContext";
 
+const backendUrl = import.meta.env.VITE_backendUrl
+
 export const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
@@ -8,11 +10,12 @@ const AuthProvider = ({ children }) => {
   const { showNotification } = useNotification();
   const [loading, setLoading] = useState(true); // ✅ Add loading state
 
+
   // ✅ Check user authentication on page load
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const res = await fetch("http://localhost:4000/api/auth/me", {
+        const res = await fetch(`${backendUrl}/api/auth/me`, {
           method: "GET",
           credentials: "include",
         });
@@ -36,7 +39,7 @@ const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const res = await fetch("http://localhost:4000/api/auth/login", {
+      const res = await fetch(`${backendUrl}/api/auth/login`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -57,7 +60,7 @@ const AuthProvider = ({ children }) => {
 
   const register = async (name, email, password) => {
     try {
-      const res = await fetch("http://localhost:4000/api/auth/register", {
+      const res = await fetch(`${backendUrl}/api/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -77,7 +80,7 @@ const AuthProvider = ({ children }) => {
 
   const handleLogout = async (navigate) => {
     try {
-      await fetch("http://localhost:4000/api/auth/logout", {
+      await fetch(`${backendUrl}/api/auth/logout`, {
         method: "POST",
         credentials: "include",
       });

@@ -3,8 +3,9 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
 import { io } from "socket.io-client";
+const backendUrl = import.meta.env.VITE_backendUrl
 
-const socket = io("http://localhost:4000");
+const socket = io(backendUrl);
 
 const Navbar = () => {
   const { user, handleLogout } = useContext(AuthContext);
@@ -16,7 +17,7 @@ const Navbar = () => {
     if (!user) return;
 
     const fetchNotifications = async () => {
-      const response = await fetch("http://localhost:4000/api/notifications", {
+      const response = await fetch(`${backendUrl}/api/notifications`, {
         method: "GET",
         credentials: "include",
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },

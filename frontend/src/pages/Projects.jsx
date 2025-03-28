@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import SearchBar from "../components/SearchBar";
 import { useTheme } from "../context/ThemeContext";
 import { useNotification } from "../context/NotificationContext";
+const backendUrl = import.meta.env.VITE_backendUrl
 
 const Projects = () => {
   const { user, loading } = useContext(AuthContext);
@@ -33,7 +34,7 @@ const Projects = () => {
 
   const fetchProjects = async () => {
     try {
-      const response = await fetch("http://localhost:4000/api/projects", {
+      const response = await fetch(`${backendUrl}/api/projects`, {
         method: "GET",
         credentials: "include",
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -58,7 +59,7 @@ const Projects = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch("http://localhost:4000/api/auth", {
+      const response = await fetch(`${backendUrl}/api/auth`, {
         method: "GET",
         credentials: "include",
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -78,7 +79,7 @@ const Projects = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:4000/api/projects/create", {
+      const response = await fetch(`${backendUrl}/api/projects/create`, {
         method: "POST",
         credentials: "include",
         headers: {
@@ -110,7 +111,7 @@ const Projects = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:4000/api/projects/add-member", {
+      const response = await fetch(`${backendUrl}/api/projects/add-member`, {
         method: "POST",
         credentials: "include",
         headers: {
@@ -138,7 +139,7 @@ const Projects = () => {
     if (!user) return;
 
     try {
-      const response = await fetch(`http://localhost:4000/api/projects/${projectId}`, {
+      const response = await fetch(`${backendUrl}/api/projects/${projectId}`, {
         method: "DELETE",
         credentials: "include",
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useTheme } from "../context/ThemeContext";
 import { useNotification } from "../context/NotificationContext";
+const backendUrl = import.meta.env.VITE_backendUrl
 
 const UsersList = () => {
   const { darkTheme } = useTheme()
@@ -10,7 +11,7 @@ const UsersList = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch("http://localhost:4000/api/admin/users", {
+      const response = await fetch(`${backendUrl}/api/admin/users`, {
         credentials: "include",
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
@@ -29,7 +30,7 @@ const UsersList = () => {
     if (!confirm("Are you sure you want to delete this user?")) return;
 
     try {
-      await fetch(`http://localhost:4000/api/admin/users/${userId}`, {
+      await fetch(`${backendUrl}/api/admin/users/${userId}`, {
         method: "DELETE",
         credentials: "include",
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },

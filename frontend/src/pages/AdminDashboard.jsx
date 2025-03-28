@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AdminPanel from "../components/AdminPanel";
+const backendUrl = import.meta.env.VITE_backendUrl
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -9,7 +10,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     const checkAdmin = async () => {
       try {
-        const response = await fetch("http://localhost:4000/api/auth/me", {
+        const response = await fetch(`${backendUrl}/api/auth/me`, {
           credentials: "include",
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         });

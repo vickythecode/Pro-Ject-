@@ -7,6 +7,7 @@ import TaskManager from "../components/TaskManager";
 import ProjectDashboard from "../components/ProjectDashboard";
 import ProjectFiles from "../components/ProjectFiles";
 import { Link } from "react-router-dom";
+const backendUrl = import.meta.env.VITE_backendUrl
 
 const ProjectDetail = () => {
   const { id } = useParams();
@@ -33,7 +34,7 @@ const ProjectDetail = () => {
 
   const fetchProjectDetails = async () => {
     try {
-      const response = await fetch(`http://localhost:4000/api/projects/${id}`, {
+      const response = await fetch(`${backendUrl}/api/projects/${id}`, {
         method: "GET",
         credentials: "include",
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -54,7 +55,7 @@ const ProjectDetail = () => {
 
   const handleUpdate = async () => {
     try {
-      const response = await fetch(`http://localhost:4000/api/projects/${id}`, {
+      const response = await fetch(`${backendUrl}/api/projects/${id}`, {
         method: "PUT",
         credentials: "include",
         headers: {
