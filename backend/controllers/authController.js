@@ -30,9 +30,8 @@ export const registerUser = async (req, res) => {
       // Send token in an HTTP-only cookie
       res.cookie("token", token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production", // Secure in production
-        sameSite: "strict",
-        maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+        secure:true, // Secure in production
+        sameSite: "None"
       });
 
       res.status(201).json({
@@ -77,10 +76,9 @@ export const loginUser = async (req, res) => {
 
     // Send token in an HTTP-only cookie
     res.cookie("token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      maxAge: 30 * 24 * 60 * 60 * 1000,
+        httpOnly: true,
+        secure:true, // Secure in production
+        sameSite: "None"
     });
 
     res.json({
