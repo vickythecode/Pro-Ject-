@@ -31,7 +31,7 @@
   app.use("/uploads", express.static(path.join("uploads")));
   app.use(
     cors({
-      origin: "https://pro-ject-1.onrender.com/", // Allow only your frontend
+      origin: "https://pro-ject-1.onrender.com", // Allow only your frontend 
       credentials: true, // Allow cookies and auth headers
     })
   );
