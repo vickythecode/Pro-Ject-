@@ -4,7 +4,7 @@ const Footer = () => {
     return (
       <footer className="bg-gray-950 text-white py-8">
         <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
-          <p>&copy; {new Date().getFullYear()} Pro-Ject </p>
+          <p>&copy; {new Date().getFullYear()} Pro-Ject <p className="text-sm text-gray-300">Made by @vigneshraman</p></p>
           <div className="flex space-x-6 mt-4 md:mt-0">
             <a
               href="mailto:vigneshraman.dev@example.com"
