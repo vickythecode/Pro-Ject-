@@ -31,10 +31,13 @@
   app.use("/uploads", express.static(path.join("uploads")));
   app.use(
     cors({
-      origin: "https://pro-ject-1.onrender.com", // Allow only your frontend 
+      origin: "https://pro-ject-1.onrender.com", // Correct frontend URL
       credentials: true, // Allow cookies and auth headers
+      methods: ["GET", "POST", "PUT", "DELETE"],
+      allowedHeaders: ["Content-Type", "Authorization"],
     })
   );
+  
 
   // Routes
   app.use("/api/auth", authRoutes);
